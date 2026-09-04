@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catalogue — TechZone Tunisie</title>
+  <meta name="description" content="Parcourez et filtrez les produits TechZone Tunisie par catégorie, marque, prix, couleur, taille et disponibilité.">
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+  <header id="site-header"></header>
+  <main>
+    <section class="page-header"><div class="container"><nav aria-label="Fil d’Ariane"><ol class="breadcrumb mb-2"><li class="breadcrumb-item"><a href="index.html">Accueil</a></li><li class="breadcrumb-item active" aria-current="page">Catalogue</li></ol></nav><h1 class="mb-2">Catalogue</h1><p class="mb-0 text-secondary">Trouvez rapidement le produit adapté à votre besoin.</p></div></section>
+    <section class="section-space pt-4">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-3">
+            <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="filters-panel" aria-labelledby="filters-title">
+              <div class="offcanvas-header"><h2 class="offcanvas-title h5" id="filters-title">Filtres</h2><button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#filters-panel" aria-label="Fermer"></button></div>
+              <div class="offcanvas-body d-block"><form id="filters-form" class="filter-card">
+                <div class="d-flex justify-content-between align-items-center"><h2 class="h5 mb-0">Filtrer</h2><button type="reset" class="btn btn-sm btn-link p-0">Réinitialiser</button></div>
+                <div class="filter-group"><label class="form-label fw-semibold" for="filter-category">Catégorie</label><select class="form-select" id="filter-category" name="category"><option value="">Toutes</option></select></div>
+                <div class="filter-group"><label class="form-label fw-semibold" for="filter-subcategory">Sous-catégorie</label><select class="form-select" id="filter-subcategory" name="subcategory"><option value="">Toutes</option></select></div>
+                <div class="filter-group"><label class="form-label fw-semibold" for="filter-brand">Marque</label><select class="form-select" id="filter-brand" name="brand"><option value="">Toutes</option></select></div>
+                <div class="filter-group"><span class="form-label fw-semibold d-block">Prix en DT</span><div class="row g-2"><div class="col"><label class="visually-hidden" for="filter-min">Prix minimum</label><input class="form-control" id="filter-min" name="minPrice" type="number" min="0" step="1" placeholder="Min."></div><div class="col"><label class="visually-hidden" for="filter-max">Prix maximum</label><input class="form-control" id="filter-max" name="maxPrice" type="number" min="0" step="1" placeholder="Max."></div></div></div>
+                <div class="filter-group"><label class="form-label fw-semibold" for="filter-color">Couleur</label><select class="form-select" id="filter-color" name="color"><option value="">Toutes</option></select></div>
+                <div class="filter-group"><label class="form-label fw-semibold" for="filter-size">Taille</label><select class="form-select" id="filter-size" name="size"><option value="">Toutes</option></select></div>
+                <div class="filter-group d-grid gap-2">
+                  <div class="form-check"><input class="form-check-input" type="checkbox" id="filter-stock" name="inStock"><label class="form-check-label" for="filter-stock">En stock uniquement</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" id="filter-discount" name="discounted"><label class="form-check-label" for="filter-discount">Produits en promotion</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" id="filter-featured" name="featured"><label class="form-check-label" for="filter-featured">Produits vedettes</label></div>
+                </div>
+                <button class="btn btn-primary w-100 d-lg-none mt-3" type="button" data-bs-dismiss="offcanvas" data-bs-target="#filters-panel">Afficher les résultats</button>
+              </form></div>
+            </div>
+          </div>
+          <div class="col-lg-9">
+            <div class="result-toolbar">
+              <div class="d-flex align-items-center gap-2"><button class="btn btn-outline-primary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#filters-panel" aria-controls="filters-panel"><i class="bi bi-sliders me-1"></i>Filtres</button><span id="result-count" class="text-secondary"></span></div>
+              <div><label class="visually-hidden" for="sort-products">Trier les produits</label><select class="form-select" id="sort-products"><option value="relevance">Pertinence</option><option value="price-asc">Prix croissant</option><option value="price-desc">Prix décroissant</option><option value="newest">Nouveautés</option><option value="name">Nom du produit</option><option value="featured">Produits vedettes</option></select></div>
+            </div>
+            <div class="alert alert-primary d-none" id="active-search" role="status"></div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4" id="products-grid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer id="site-footer"></footer>
+  <button id="back-to-top" class="back-to-top" type="button" aria-label="Revenir en haut"><i class="bi bi-arrow-up"></i></button>
+  <div id="toast-region" class="toast-container position-fixed top-0 end-0 p-3"></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="js/products.js"></script>
+</body>
+</html>
