@@ -95,8 +95,8 @@ async function initProduct() {
   const products = await getProducts();
   initCommonUI(products);
   const product = id ? await getProduct(id) : null;
-  if (!product) { root.innerHTML = emptyState('Produit introuvable', 'Ce produit n’existe pas ou n’est plus disponible.'); document.title = 'Produit introuvable — TechZone Tunisie'; return; }
-  document.title = `${product.name} — TechZone Tunisie`;
+  if (!product) { root.innerHTML = emptyState('Produit introuvable', 'Ce produit n’existe pas ou n’est plus disponible.'); document.title = 'Produit introuvable — klyvo.tn'; return; }
+  document.title = `${product.name} — klyvo.tn`;
   document.querySelector('meta[name="description"]').content = product.shortDescription;
   structuredData(product);
   document.querySelector('#product-breadcrumb').innerHTML = `<li class="breadcrumb-item"><a href="index.html">Accueil</a></li><li class="breadcrumb-item"><a href="products.html?category=${encodeURIComponent(product.category)}">${escapeHtml(product.category)}</a></li><li class="breadcrumb-item active" aria-current="page">${escapeHtml(product.name)}</li>`;
