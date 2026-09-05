@@ -72,12 +72,11 @@ function renderHeader(products) {
   target.innerHTML = `
     
     <nav
-  class="navbar navbar-expand-lg tech-header sticky-top"
+  class="navbar navbar-expand-lg tech-header sticky-top fixed-top "
   aria-label="Navigation principale"
 >
   <div class="container tech-header-inner">
 
-    <!-- Logo + forme inclinée -->
     <a
       class="navbar-brand tech-brand"
       href="index.html"
@@ -96,8 +95,6 @@ function renderHeader(products) {
         <i></i>
       </span>
     </a>
-
-    <!-- Panier + menu téléphone -->
     <div class="tech-header-actions d-flex align-items-center gap-2 order-lg-3 ms-auto">
 
       <a
@@ -190,7 +187,7 @@ function renderHeader(products) {
 
             <button
               type="submit"
-              class="btn tech-search-btn"
+              class="btn tech-search-btn rounded-end"
               aria-label="Rechercher"
             >
               <i class="bi bi-search" aria-hidden="true"></i>
@@ -247,7 +244,7 @@ function renderFooter() {
         <div class="col-lg-5"><a class="brand-lockup footer-brand" href="index.html"><img src="photo/logo.png" alt="klyvo.tn" class="brand-icon" width="100" height="50"><br/></a><p class="mt-3 footer-intro">Des accessoires fiables pour votre téléphone, votre espace gaming, votre voiture et votre bureau.</p></div>
         <div class="col-6 col-lg-2"><h2 class="footer-title">Boutique</h2><a href="products.html">Tous les produits</a><a href="products.html?featured=1">Produits vedettes</a><a href="products.html?discounted=1">Promotions</a></div>
         <div class="col-6 col-lg-2"><h2 class="footer-title">Aide</h2><a href="cart.html">Mon panier</a><a href="checkout.html">Commander</a><a href="docs.html">Livraison et paiement</a></div>
-        <div class="col-lg-3"><h2 class="footer-title">Contact</h2><p><i class="bi bi-telephone me-2"></i>${escapeHtml(STORE_CONFIG.phone)}</p><p><i class="bi bi-envelope me-2"></i>${escapeHtml(STORE_CONFIG.email)}</p><p><i class="bi bi-geo-alt me-2"></i>${escapeHtml(STORE_CONFIG.address)}</p></div>
+        <div class="col-lg-3"><h2 class="footer-title">Contact</h2><p><i class="bi bi-telephone me-2"></i>${escapeHtml(STORE_CONFIG.phone)}</p><p><i class="bi bi-envelope me-2"></i>${escapeHtml(STORE_CONFIG.email)}</p><p><i class="bi bi-geo-alt me-2"></i>${escapeHtml(STORE_CONFIG.address)}</p><div class="d-flex justify-content-center align-items-center gap-3 flex-nowrap"><a href="contact.html" class="link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover fw-semibold"><i class="bi bi-facebook"></i> </a><a href="contact.html" class="link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover fw-semibold"><i class="bi bi-twitter"></i> </a><a href="contact.html" class="link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover fw-semibold"><i class="bi bi-instagram"></i> </a></div></div>
       </div>
     </div>
     <div class="footer-bottom"><div class="container d-flex flex-column flex-sm-row justify-content-between gap-2"><span>© ${new Date().getFullYear()} klyvo.tn</span><span>Paiement à la livraison · Prix en dinar tunisien</span></div></div>`;

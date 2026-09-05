@@ -710,8 +710,8 @@ h1, h2, h3, h4, h5, h6 { color: var(--tz-black); font-weight: 750; letter-spacin
   }
 
   .tech-brand .brand-icon {
-    width: 78px;
-    max-height: 39px;
+    width: 90px;
+    max-height: 50px;
   }
 
   .tech-brand-rails {
