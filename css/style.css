@@ -184,7 +184,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--tz-black); font-weight: 750; letter-spacin
 /* Scrolling Announcement Bar */
 .announcement-bar {
   --announcement-gap: clamp(2.5rem, 7vw, 7rem);
-
   width: 100%;
   overflow: hidden;
   color: #fff;
@@ -194,6 +193,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--tz-black); font-weight: 750; letter-spacin
 
 .announcement-track {
   display: flex;
+  height: 10%;
   width: max-content;
   animation: announcement-scroll 28s linear infinite;
   will-change: transform;
@@ -298,7 +298,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--tz-black); font-weight: 750; letter-spacin
   border-radius: 10px;
 }
 
-/* الأسهم */
+
 #promoImageCarousel .carousel-control-prev,
 #promoImageCarousel .carousel-control-next {
   width: 7%;
@@ -317,10 +317,20 @@ h1, h2, h3, h4, h5, h6 { color: var(--tz-black); font-weight: 750; letter-spacin
 }
 /* Product sliders: 1 mobile, 2 tablet, 4 desktop */
 .product-slider {
-  --products-per-view: 1;
+  --products-per-view: 2;
   width: calc(100% + 1rem);
   margin-inline: -.5rem;
   overflow: hidden;
+}
+.carousel-item .product-image-wrap {
+  height: 270px;
+  overflow: hidden;
+}
+
+.carousel-item .product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .product-slider-track {
@@ -355,7 +365,424 @@ h1, h2, h3, h4, h5, h6 { color: var(--tz-black); font-weight: 750; letter-spacin
   justify-content: center;
   flex: 0 0 48px;
 }
+/* ==================================================
+   HEADER TECH KLYVO
+================================================== */
 
+.tech-header {
+  --header-height: 60px;
+
+  position: sticky;
+  z-index: 1030;
+  min-height: var(--header-height);
+  padding: 0;
+  background: #ffffff;
+  border-top: 3px solid #00020f;
+  box-shadow: 0 8px 25px rgba(0, 2, 15, 0.1);
+  isolation: isolate;
+}
+
+/* Ligne gradient sous la partie blanche */
+.tech-header::after {
+  position: absolute;
+  z-index: 0;
+  top: calc(var(--header-height) - 3px);
+  right: 0;
+  left: 0;
+  height: 3px;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    #1746ff 0%,
+    #0272fc 45%,
+    #00d9ff 100%
+  );
+  box-shadow:
+    0 0 8px rgba(2, 114, 252, 0.55),
+    0 0 16px rgba(0, 217, 255, 0.25);
+}
+
+.tech-header-inner {
+  position: relative;
+  z-index: 1;
+  min-height: var(--header-height);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* ==================================================
+   PARTIE LOGO
+================================================== */
+
+.tech-brand {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex: 0 0 clamp(185px, 19vw, 235px);
+  align-items: center;
+  align-self: flex-start;
+  width: clamp(185px, 19vw, 235px);
+  height: var(--header-height);
+  margin: 0 1.25rem 0 0;
+  padding: 0 55px 0 0;
+  isolation: isolate;
+}
+
+/* Forme foncée inclinée */
+.tech-brand::before {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: -100vw;
+  content: "";
+  background:
+    radial-gradient(
+      circle at 85% 30%,
+      rgba(2, 114, 252, 0.18),
+      transparent 30%
+    ),
+    linear-gradient(
+      120deg,
+      #00020f 0%,
+      #031329 65%,
+      #061c3d 100%
+    );
+
+  clip-path: polygon(
+    0 0,
+    calc(100% - 42px) 0,
+    100% 100%,
+    0 100%
+  );
+}
+
+/* Logo */
+.tech-brand .brand-icon {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 94px;
+  max-width: 100%;
+  max-height: 44px;
+  object-fit: contain;
+}
+
+/* ==================================================
+   LIGNES INCLINÉES TECH
+================================================== */
+
+.tech-brand-rails {
+  position: absolute;
+  z-index: 4;
+  top: -4px;
+  right: 21px;
+  width: 38px;
+  height: calc(100% + 8px);
+  pointer-events: none;
+}
+
+.tech-brand-rails i {
+  position: absolute;
+  top: 0;
+  width: 5px;
+  height: 94%;
+  border-radius: 20px;
+  transform: skewX(34deg);
+}
+
+/* Ligne cyan */
+.tech-brand-rails i:nth-child(1) {
+  left: 0;
+  background: linear-gradient(
+    180deg,
+    #7ff6ff 0%,
+    #00d9ff 45%,
+    #0272fc 100%
+  );
+  box-shadow:
+    0 0 6px rgba(0, 217, 255, 0.8),
+    0 0 14px rgba(0, 217, 255, 0.4);
+}
+
+/* Ligne claire centrale */
+.tech-brand-rails i:nth-child(2) {
+  left: 11px;
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #b9efff 45%,
+    #4ba2ff 100%
+  );
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+/* Ligne bleue */
+.tech-brand-rails i:nth-child(3) {
+  left: 22px;
+  background: linear-gradient(
+    180deg,
+    #35a4ff 0%,
+    #0272fc 50%,
+    #1746ff 100%
+  );
+  box-shadow:
+    0 0 7px rgba(2, 114, 252, 0.8),
+    0 0 15px rgba(23, 70, 255, 0.4);
+}
+
+/* ==================================================
+   NAVIGATION
+================================================== */
+
+.tech-header .navbar-collapse {
+  min-width: 0;
+}
+
+.tech-header .navbar-nav {
+  min-width: 0;
+}
+
+.tech-header .nav-link {
+  position: relative;
+  padding: 0.4rem 0.55rem !important;
+  color: #111827;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 7px;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.tech-header .nav-link:hover,
+.tech-header .nav-link:focus {
+  color: #0272fc;
+  background: rgba(2, 114, 252, 0.08);
+}
+
+.tech-header .nav-link::after {
+  transition: transform 0.2s ease;
+}
+
+/* ==================================================
+   PANIER ET MENU
+================================================== */
+
+.tech-header-actions {
+  height: var(--header-height);
+}
+
+.tech-header-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #00020f;
+  background: #ffffff;
+  border: 1px solid #dce4f1;
+  border-radius: 11px;
+  box-shadow: 0 4px 12px rgba(0, 2, 15, 0.06);
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.tech-header-btn:hover {
+  color: #ffffff;
+  background: linear-gradient(135deg, #0272fc, #1746ff);
+  border-color: #0272fc;
+  transform: translateY(-1px);
+}
+
+.tech-header-btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(2, 114, 252, 0.18);
+}
+
+.tech-header .navbar-toggler-icon {
+  width: 21px;
+  height: 21px;
+}
+
+/* ==================================================
+   RECHERCHE
+================================================== */
+
+.tech-search-item {
+  position: relative;
+}
+
+.tech-search {
+  position: relative;
+  width: clamp(205px, 23vw, 320px);
+}
+
+.tech-search .form-control {
+  height: 39px;
+  min-width: 0;
+  padding-right: 0.7rem;
+  padding-left: 0.85rem;
+  font-size: 0.86rem;
+  border-color: #dce4f1;
+  border-radius: 10px 0 0 10px;
+  background: #f8faff;
+}
+
+.tech-search .form-control:focus {
+  position: relative;
+  z-index: 2;
+  background: #ffffff;
+  border-color: #0272fc;
+  box-shadow: 0 0 0 0.2rem rgba(2, 114, 252, 0.12);
+}
+
+.tech-search-btn {
+  display: inline-flex;
+  flex: 0 0 39px;
+  align-items: center;
+  justify-content: center;
+  width: 39px;
+  min-width: 39px;
+  height: 39px;
+  padding: 0;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0272fc, #1746ff);
+  border-color: #0272fc;
+  border-radius: 0 10px 10px 0;
+}
+
+.tech-search-btn:hover {
+  color: #ffffff;
+  background: linear-gradient(135deg, #00020f, #06244d);
+  border-color: #00020f;
+}
+
+/* Suggestions */
+.tech-search .search-suggestions {
+  position: absolute;
+  z-index: 1100;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #dce4f1;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 15px 35px rgba(0, 2, 15, 0.15);
+}
+
+/* ==================================================
+   TABLETTE ET TÉLÉPHONE
+================================================== */
+
+@media (max-width: 991.98px) {
+  .tech-header {
+    --header-height: 54px;
+  }
+
+  .tech-header-inner {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+
+  .tech-brand {
+    flex-basis: 165px;
+    width: 165px;
+    height: var(--header-height);
+    margin-right: 0.5rem;
+    padding-right: 45px;
+  }
+
+  .tech-brand::before {
+    clip-path: polygon(
+      0 0,
+      calc(100% - 36px) 0,
+      100% 100%,
+      0 100%
+    );
+  }
+
+  .tech-brand .brand-icon {
+    width: 78px;
+    max-height: 39px;
+  }
+
+  .tech-brand-rails {
+    right: 17px;
+    width: 32px;
+  }
+
+  .tech-brand-rails i {
+    width: 4px;
+    transform: skewX(33deg);
+  }
+
+  .tech-brand-rails i:nth-child(2) {
+    left: 9px;
+  }
+
+  .tech-brand-rails i:nth-child(3) {
+    left: 18px;
+  }
+
+  .tech-header-actions {
+    height: var(--header-height);
+  }
+
+  .tech-header-btn {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+
+  .tech-header .navbar-collapse {
+    flex-basis: 100%;
+    padding: 0.7rem 0 0.9rem;
+    border-top: 1px solid #edf1f7;
+  }
+
+  .tech-header .navbar-nav {
+    align-items: stretch;
+  }
+
+  .tech-header .nav-link {
+    padding: 0.58rem 0.45rem !important;
+  }
+
+  .tech-search-item {
+    width: 100%;
+    padding-top: 0.45rem;
+  }
+
+  .tech-search {
+    width: 100%;
+  }
+}
+
+/* Petits téléphones */
+@media (max-width: 360px) {
+  .tech-brand {
+    flex-basis: 140px;
+    width: 140px;
+    padding-right: 40px;
+  }
+
+  .tech-brand .brand-icon {
+    width: 68px;
+  }
+
+  .tech-brand-rails {
+    right: 14px;
+  }
+}
 @media (min-width: 768px) {
   .product-slider {
     --products-per-view: 2;

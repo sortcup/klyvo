@@ -12,19 +12,17 @@ export function productCard(product) {
   return `
     <div class="carousel-item active"><div class="promo-slide-image" alt="Promotions klyvo.tn" fetchpriority="high"><article class="product-card card h-100 border-0" data-product-id="${escapeHtml(product.id)}">
       <a class="product-image-wrap" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="Voir ${escapeHtml(product.name)}">
-        <img class="card-img-top product-image" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy" width="560" height="420">
+        <img class="card-img-top product-image" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy" width="auto" height="460px">
         <span class="product-badges">
           ${sale ? '<span class="badge text-bg-danger">Promo</span>' : ''}
-          ${product.featured ? '<span class="badge badge-featured">Vedette</span>' : ''}
         </span>
       </a>
-      <div class="card-body d-flex flex-column p-3 p-xl-4">
-        <div class="product-meta mb-2">${escapeHtml(product.category)} · ${escapeHtml(product.brand)}</div>
+      <div class="card-body d-flex flex-column p-1 p-xl-2">
         <h3 class="product-title h6"><a href="product.html?id=${encodeURIComponent(product.id)}">${escapeHtml(product.name)}</a></h3>
         <div class="mt-auto d-flex align-items-end justify-content-between gap-2">
           <div>
             ${sale ? `<div class="old-price">${formatPrice(product.price)}</div>` : ''}
-            <div class="product-price">${Array.isArray(product.variants) && product.variants.length ? '<small>À partir de </small>' : ''}${formatPrice(displayedPrice)}</div>
+            <div class="product-price">${Array.isArray(product.variants) && product.variants.length ? '' : ''}${formatPrice(displayedPrice)}</div>
           </div>
         </div>
       </div> 
@@ -72,34 +70,148 @@ function renderHeader(products) {
   const categoryLinks = categories.map((category) => `
     <li><a class="dropdown-item d-flex justify-content-between" href="products.html?category=${encodeURIComponent(category.name)}"><span>${escapeHtml(category.name)}</span><span class="text-secondary">${category.subcategories.length}</span></a></li>`).join('');
   target.innerHTML = `
-    <div class="utility-bar"><div class="container d-flex justify-content-between align-items-center"><span><i class="bi bi-truck me-2"></i>Livraison partout en Tunisie</span><span class="d-none d-sm-inline">Service client · ${escapeHtml(STORE_CONFIG.phone)}</span></div></div>
-    <nav class="navbar navbar-expand-lg bg-white sticky-top" aria-label="Navigation principale">
-      <div class="container py-2">
-        <a class="navbar-brand brand-lockup" href="index.html" aria-label=" klyvo.tn, accueil"><img src="photo/logo.png" alt="klyvo.tn" class="brand-icon" width="120" height="auto"></a>
-        <div class="d-flex align-items-center gap-2 order-lg-3">
-          <a href="cart.html" class="btn cart-button position-relative" aria-label="Voir le panier"><i class="bi bi-bag"></i><span class="d-none d-sm-inline">Panier</span><span class="cart-count" data-cart-count hidden>0</span></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Ouvrir le menu"><span class="navbar-toggler-icon"></span></button>
-        </div>
-        <div class="collapse navbar-collapse order-lg-2" id="main-nav">
-          <ul class="navbar-nav ms-lg-5 align-items-lg-center gap-lg-2">
-            <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
-            <li class="nav-item dropdown"><button class="nav-link dropdown-toggle border-0 bg-transparent" data-bs-toggle="dropdown" aria-expanded="false">Catégories</button><ul class="dropdown-menu shadow-sm">${categoryLinks}</ul></li>
-            <li class="nav-item"><a class="nav-link" href="products.html?discounted=1">Promotions</a></li>
-            <li class="nav-item"><a class="nav-link" href="#site-footer">Contact</a></li>
-            <li class="nav-item">
-      <div class="container">
-        <form class="input-group flex-nowrap" data-global-search role="search">
-          
-          <input type="search" name="q" class="form-control" autocomplete="off" placeholder="Rechercher un produit, une marque, un code-barres…" aria-label="Rechercher dans la boutique" aria-controls="search-suggestions" aria-expanded="false">
-          <button type="submit" class="btn btn-primary square-btn"><i class="bi bi-search" aria-hidden="true"></i></button>
-          <div class="search-suggestions" id="search-suggestions" aria-label="Suggestions de recherche" hidden></div>
-        </form>
+    
+    <nav
+  class="navbar navbar-expand-lg tech-header sticky-top"
+  aria-label="Navigation principale"
+>
+  <div class="container tech-header-inner">
 
-    </div></li>
+    <!-- Logo + forme inclinée -->
+    <a
+      class="navbar-brand tech-brand"
+      href="index.html"
+      aria-label="klyvo.tn, accueil"
+    >
+      <img
+        src="photo/logo.png"
+        alt="klyvo.tn"
+        class="brand-icon"
+      >
+
+      <!-- Lignes tech inclinées -->
+      <span class="tech-brand-rails" aria-hidden="true">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+    </a>
+
+    <!-- Panier + menu téléphone -->
+    <div class="tech-header-actions d-flex align-items-center gap-2 order-lg-3 ms-auto">
+
+      <a
+        href="cart.html"
+        class="btn tech-header-btn position-relative"
+        aria-label="Voir le panier"
+      >
+        <i class="bi bi-bag"></i>
+
+        <span class="cart-count" data-cart-count hidden>
+          0
+        </span>
+      </a>
+
+      <button
+        class="navbar-toggler tech-header-btn"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#main-nav"
+        aria-controls="main-nav"
+        aria-expanded="false"
+        aria-label="Ouvrir le menu"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+    </div>
+
+    <!-- Navigation -->
+    <div
+      class="collapse navbar-collapse order-lg-2"
+      id="main-nav"
+    >
+      <ul class="navbar-nav align-items-lg-center flex-grow-1 gap-lg-1">
+
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">
+            Accueil
+          </a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <button
+            class="nav-link dropdown-toggle border-0 bg-transparent"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Catégories
+          </button>
+
+          <ul class="dropdown-menu shadow-sm">
+            ${categoryLinks}
           </ul>
-        </div>
-      </div>
-    </nav>
+        </li>
+
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="products.html?discounted=1"
+          >
+            Promotions
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#site-footer">
+            Contact
+          </a>
+        </li>
+
+        <!-- Recherche -->
+        <li class="nav-item tech-search-item ms-lg-auto">
+
+          <form
+            class="input-group flex-nowrap tech-search"
+            data-global-search
+            role="search"
+          >
+            <input
+              type="search"
+              name="q"
+              class="form-control"
+              autocomplete="off"
+              placeholder="Rechercher un produit..."
+              aria-label="Rechercher dans la boutique"
+              aria-controls="search-suggestions"
+              aria-expanded="false"
+            >
+
+            <button
+              type="submit"
+              class="btn tech-search-btn"
+              aria-label="Rechercher"
+            >
+              <i class="bi bi-search" aria-hidden="true"></i>
+            </button>
+
+            <div
+              class="search-suggestions"
+              id="search-suggestions"
+              aria-label="Suggestions de recherche"
+              hidden
+            ></div>
+
+          </form>
+
+        </li>
+
+      </ul>
+    </div>
+
+  </div>
+</nav>
     `;
 
   const form = target.querySelector('[data-global-search]');
