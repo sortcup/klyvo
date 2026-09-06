@@ -198,7 +198,11 @@ h1, h2, h3, h4, h5, h6 { color: var(--tz-black); font-weight: 750; letter-spacin
   animation: announcement-scroll 28s linear infinite;
   will-change: transform;
 }
-
+header{
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
 .announcement-group {
   display: flex;
   flex-shrink: 0;
@@ -461,11 +465,11 @@ h1, h2, h3, h4, h5, h6 { color: var(--tz-black); font-weight: 750; letter-spacin
 /* Logo */
 .tech-brand .brand-icon {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   display: block;
-  width: 94px;
+  width: 150px;
   max-width: 100%;
-  max-height: 44px;
+  max-height: 70px;
   object-fit: contain;
 }
 
