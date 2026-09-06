@@ -29,7 +29,7 @@ function renderProduct(product) {
   const initialStock = productAvailableStock(product);
   const initialPrice = selectedUnitPrice(product);
   const images = [...new Set([product.image, ...(product.images || [])].filter(Boolean))];
-  root.innerHTML = `<div class="row g-4 g-lg-5">
+  root.innerHTML = ` <div class="row g-4 g-lg-5">
     <div class="col-lg-6"><div class="gallery-main"><img id="main-product-image" src="${escapeHtml(images[0])}" alt="${escapeHtml(product.name)}" width="800" height="600"></div><div class="gallery-thumbs" aria-label="Galerie du produit">${images.map((image, index) => `<button class="gallery-thumb ${index === 0 ? 'active' : ''}" type="button" data-gallery-image="${escapeHtml(image)}" aria-label="Afficher l’image ${index + 1}"><img src="${escapeHtml(image)}" alt="" width="78" height="65"></button>`).join('')}</div></div>
     <div class="col-lg-6">
       <p class="eyebrow mb-2">${escapeHtml(product.category)} · ${escapeHtml(product.subcategory)}</p>

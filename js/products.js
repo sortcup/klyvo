@@ -7,7 +7,7 @@ const form = document.querySelector('#filters-form');
 const sort = document.querySelector('#sort-products');
 const pagination = document.querySelector('#products-pagination');
 const paginationNav = document.querySelector('#products-pagination-nav');
-const productsPerPage = 6;
+const productsPerPage = 8;
 const params = new URLSearchParams(location.search);
 let allProducts = [];
 let currentPage = Math.max(
@@ -166,7 +166,7 @@ function render() {
   grid.innerHTML = products.length
     ? displayedProducts
         .map((product) => `
-          <div class="col">
+          <div class="">
             ${productCard(product)}
           </div>
         `)
