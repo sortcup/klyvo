@@ -7,4 +7,5 @@ export const STORE_CONFIG = Object.freeze({
   phone: '+216 27297555',
   address: 'sfax, Tunisie',
   cacheDurationMs: 5 * 60 * 1000,
+  
 });
