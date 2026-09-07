@@ -14,7 +14,7 @@ export function productCard(product) {
       <a class="product-image-wrap" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="Voir ${escapeHtml(product.name)}">
         <img class="card-img-top product-image" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy" width="auto" height="460px">
         <span class="product-badges">
-          ${sale ? '<span class="badge text-bg-danger">Promo</span>' : ''}
+          ${sale ? '<span class="badge text-bg-danger">' + escapeHtml((1-product.discountPrice/product.price).toFixed(2)*100) + '%</span>' : ''}
         </span>
       </a>
       <div class="card-body d-flex flex-column p-1 p-xl-2">

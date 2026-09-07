@@ -20,7 +20,7 @@ function optionButtons(values, type, product) {
 function structuredData(product) {
   const script = document.createElement('script');
   script.type = 'application/ld+json';
-  script.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Product', name: product.name, image: product.images, description: product.shortDescription, sku: product.sku, brand: { '@type': 'Brand', name: product.brand }, offers: { '@type': 'Offer', priceCurrency: 'TND', price: selectedUnitPrice(product), availability: productAvailableStock(product) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' } });
+  script.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Product', name: product.name, image: product.images, description: product.description, shortDescription: product.shortDescription, sku: product.sku, brand: { '@type': 'Brand', name: product.brand }, offers: { '@type': 'Offer', priceCurrency: 'TND', price: selectedUnitPrice(product), availability: productAvailableStock(product) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' } });
   document.head.appendChild(script);
 }
 
@@ -35,14 +35,14 @@ function renderProduct(product) {
       <p class="eyebrow mb-2">${escapeHtml(product.category)} · ${escapeHtml(product.subcategory)}</p>
       <h1 class="display-6 mb-3">${escapeHtml(product.name)}</h1>
       <p class="lead text-secondary">${escapeHtml(product.shortDescription)}</p>
-      <div class="d-flex align-items-end gap-3 my-4"><span class="detail-price" id="detail-price">${formatPrice(initialPrice)}</span>${sale ? `<span class="old-price fs-6 mb-2">${formatPrice(product.price)}</span><span class="badge text-bg-danger mb-2">Promotion</span>` : ''}</div>
+      <div class="d-flex align-items-end gap-3 my-4"><span class="detail-price" id="detail-price">${formatPrice(initialPrice)}</span>${sale ? `<span class="old-price fs-6 mb-2">${formatPrice(product.price)}</span><span class="badge text-bg-danger mb-2">${escapeHtml((1-product.discountPrice/product.price).toFixed(2)*100)}%</span>` : ''}</div>
       <div class="stock-line ${initialStock > 0 ? 'in-stock' : 'out-stock'} mb-4" id="detail-stock"><span></span>${initialStock > 0 ? `${initialStock} unités disponibles` : 'Rupture de stock'}</div>
       ${product.colors?.length ? `<fieldset class="mb-4"><legend class="h6">Couleur <span class="text-danger">*</span></legend><div class="option-grid">${optionButtons(product.colors, 'color', product)}</div></fieldset>` : ''}
       ${product.sizes?.length ? `<fieldset class="mb-4"><legend class="h6">Taille <span class="text-danger">*</span></legend><div class="option-grid">${optionButtons(product.sizes, 'size', product)}</div></fieldset>` : ''}
       <div class="d-flex flex-wrap align-items-center gap-3 mb-4"><div class="quantity-control"><button type="button" data-quantity-change="-1" aria-label="Diminuer la quantité">−</button><input id="product-quantity" type="number" min="1" max="${initialStock}" value="${initialStock > 0 ? 1 : 0}" aria-label="Quantité"><button type="button" data-quantity-change="1" aria-label="Augmenter la quantité">+</button></div><button class="btn btn-primary btn-lg flex-grow-1" type="button" id="add-to-cart" ${initialStock <= 0 ? 'disabled' : ''}><i class="bi bi-bag-plus me-2"></i>Ajouter au panier</button></div>
       <p class="text-danger small" id="option-error" role="alert"></p>
       <div class="detail-facts mb-4"><div class="detail-fact"><small>Marque</small><strong>${escapeHtml(product.brand)}</strong></div><div class="detail-fact"><small>Référence</small><strong>${escapeHtml(product.sku)}</strong></div><div class="detail-fact"><small>Code-barres</small><strong>${escapeHtml(product.barcode)}</strong></div><div class="detail-fact"><small>État</small><strong>${escapeHtml(product.condition)}</strong></div></div>
-      <div class="border-top pt-4"><h2 class="h5">Description</h2><p>${escapeHtml(product.description)}</p></div>
+      <div class="border-top "><h2 class="h5">Description</h2>${escapeHtml(product.description)}</div>
     </div></div>`;
 
   let color = '';
