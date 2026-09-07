@@ -24,7 +24,7 @@ const icons = {
 function sliderSkeletons() {
   return `
     <div class="product-slider-track">
-      ${skeletonCards(4)}
+      ${skeletonCards(8)}
     </div>
   `;
 }
@@ -73,9 +73,7 @@ async function initHome() {
     (product) => product.active !== false
   );
 
-  /*
-   * Categories: رجعوا كيف كانوا
-   */
+  
   const categories = [
     ...new Set(
       active.map((product) => product.category)

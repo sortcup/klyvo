@@ -1,8 +1,7 @@
 import { getProduct, getProducts } from './api.js';
 import { clampQuantity, formatPrice, productAvailableStock, recommendProducts, resolveVariantSelection, selectedUnitPrice } from './core.js';
 import { cartStore } from './cart-store.js';
-import { emptyState, errorState, escapeHtml, initCommonUI, productCard, showToast, updateCartBadge } from './ui.js';
-
+import { emptyState, errorState, escapeHtml, initCommonUI, productCard, showCartWidget, updateCartBadge } from './ui.js';
 const root = document.querySelector('#product-detail');
 const id = new URLSearchParams(location.search).get('id');
 
@@ -85,9 +84,27 @@ function renderProduct(product) {
     if (missing) { root.querySelector('#option-error').textContent = 'Veuillez choisir les options du produit.'; return; }
     const stock = availableStock(product, color, size);
     if (stock <= 0) { root.querySelector('#option-error').textContent = 'Cette variante n’est plus disponible.'; return; }
-    cartStore.add(product, { color, size, quantity: quantity.value, stock, unitPrice: selectedUnitPrice(product, { color, size }) });
-    updateCartBadge();
-    showToast('Produit ajouté au panier.');
+    const unitPrice = selectedUnitPrice(
+  product,
+  { color, size }
+);
+
+cartStore.add(product, {
+  color,
+  size,
+  quantity: quantity.value,
+  stock,
+  unitPrice
+});
+
+updateCartBadge();
+
+showCartWidget(product, {
+  color,
+  size,
+  quantity: quantity.value,
+  unitPrice
+});
   });
 }
 

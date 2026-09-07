@@ -320,6 +320,13 @@ header{
   background-size: 50%;
 }
 /* Product sliders: 1 mobile, 2 tablet, 4 desktop */
+ .divb{
+  display: relative;
+  justify-content: center;
+  align-items: center;
+  width: 2%;
+
+  }
 .product-slider {
   --products-per-view: 2;
   width: calc(100% + 1rem);
@@ -681,7 +688,160 @@ header{
   background: #ffffff;
   box-shadow: 0 15px 35px rgba(0, 2, 15, 0.15);
 }
+.cart-widget {
+  position: fixed;
+  z-index: 2050;
+  top: 96px;
+  right: 1rem;
+  width: min(390px, calc(100vw - 2rem));
+  padding: 1rem;
+  border: 1px solid #dce5f0;
+  border-top: 4px solid #0272fc;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 2, 15, 0.22);
+  animation: cart-widget-enter 0.24s ease-out both;
+}
 
+.cart-widget-header,
+.cart-widget-confirmation {
+  display: flex;
+  align-items: center;
+}
+
+.cart-widget-header {
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #e7edf5;
+}
+
+.cart-widget-confirmation {
+  gap: 0.65rem;
+  color: #00020f;
+}
+
+.cart-widget-check {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  border-radius: 50%;
+  color: #fff;
+  background: #07883f;
+}
+
+.cart-widget-close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  color: #475569;
+  background: #f1f5f9;
+}
+
+.cart-widget-close:hover,
+.cart-widget-close:focus-visible {
+  color: #fff;
+  background: #00020f;
+  outline: none;
+}
+
+.cart-widget-product {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem 0;
+}
+
+.cart-widget-image {
+  width: 82px;
+  height: 82px;
+  border: 1px solid #e4eaf2;
+  border-radius: 13px;
+  background: #f4f7fb;
+  object-fit: cover;
+}
+
+.cart-widget-details {
+  min-width: 0;
+}
+
+.cart-widget-details h2 {
+  overflow: hidden;
+  margin: 0 0 0.2rem;
+  color: #00020f;
+  font-size: 0.98rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cart-widget-details p {
+  margin: 0 0 0.25rem;
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.cart-widget-details strong {
+  color: #0272fc;
+  font-size: 0.92rem;
+}
+
+@keyframes cart-widget-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(18px, -8px, 0) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .cart-widget {
+    top: auto;
+    right: 0.75rem;
+    bottom: max(
+      0.75rem,
+      env(safe-area-inset-bottom)
+    );
+    left: 0.75rem;
+    width: auto;
+    padding: 0.9rem;
+    border-radius: 16px;
+    animation-name: cart-widget-enter-mobile;
+  }
+
+  .cart-widget-product {
+    grid-template-columns: 72px minmax(0, 1fr);
+    padding: 0.85rem 0;
+  }
+
+  .cart-widget-image {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+@keyframes cart-widget-enter-mobile {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
 /* ==================================================
    TABLETTE ET TÉLÉPHONE
 ================================================== */
@@ -791,11 +951,17 @@ header{
   .product-slider {
     --products-per-view: 2;
   }
+   .divb{
+    display: none;
+  }
 }
 
 @media (min-width: 992px) {
   .product-slider {
     --products-per-view: 4;
+  }
+  .divb{
+    display: none;
   }
 }
 

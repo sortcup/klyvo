@@ -48,7 +48,123 @@ export function updateCartBadge() {
     element.hidden = count === 0;
   });
 }
+export function cartWidgetMarkup(product, options = {}) {
+  const quantity = Math.max(
+    1,
+    Number(options.quantity) || 1
+  );
 
+  const unitPrice =
+    Number(options.unitPrice) || 0;
+
+  const selectedOptions = [
+    options.color,
+    options.size
+  ]
+    .filter(Boolean)
+    .map(escapeHtml)
+    .join(' · ');
+
+  return `
+    <div class="cart-widget-header">
+      <div class="cart-widget-confirmation">
+        <span class="cart-widget-check">
+          <i class="bi bi-check-lg"></i>
+        </span>
+
+        <strong id="cart-widget-title">
+          Produit ajouté au panier
+        </strong>
+      </div>
+
+      <button
+        class="cart-widget-close"
+        type="button"
+        data-cart-widget-close
+        aria-label="Fermer"
+      >
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="cart-widget-product">
+      <img
+        class="cart-widget-image"
+        src="${escapeHtml(product?.image || '')}"
+        alt="${escapeHtml(product?.name || '')}"
+        width="82"
+        height="82"
+      >
+
+      <div class="cart-widget-details">
+        <h2>${escapeHtml(product?.name || '')}</h2>
+
+        ${
+          selectedOptions
+            ? `<p>${selectedOptions}</p>`
+            : ''
+        }
+
+        <strong>
+          ${quantity} × ${formatPrice(unitPrice)}
+        </strong>
+      </div>
+    </div>
+
+    <a
+      class="btn btn-primary w-100"
+      href="checkout.html"
+    >
+      Passer la commande
+      <i class="bi bi-arrow-right ms-1"></i>
+    </a>
+  `;
+}
+
+
+export function showCartWidget(product, options = {}) {
+  document
+    .querySelector('[data-cart-widget]')
+    ?.remove();
+
+  const widget =
+    document.createElement('aside');
+
+  widget.className = 'cart-widget';
+
+  widget.setAttribute(
+    'data-cart-widget',
+    ''
+  );
+
+  widget.setAttribute(
+    'role',
+    'dialog'
+  );
+
+  widget.setAttribute(
+    'aria-modal',
+    'false'
+  );
+
+  widget.setAttribute(
+    'aria-labelledby',
+    'cart-widget-title'
+  );
+
+  widget.innerHTML =
+    cartWidgetMarkup(product, options);
+
+  document.body.appendChild(widget);
+
+  widget
+    .querySelector('[data-cart-widget-close]')
+    ?.addEventListener('click', function () {
+      widget.remove();
+    });
+
+  return widget;
+}
 export function showToast(message, type = 'success') {
   const region = document.querySelector('#toast-region') || document.body.appendChild(Object.assign(document.createElement('div'), { id: 'toast-region', className: 'toast-container position-fixed top-0 end-0 p-3' }));
   const toast = document.createElement('div');
