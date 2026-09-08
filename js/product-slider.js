@@ -16,7 +16,6 @@ export function shouldRunProductAutoplay({
 }) {
   return slideCount > itemsPerView && !pageHidden && !reduceMotion;
 }
-
 export function initProductSlider(slider, options = {}) {
   const track = slider?.querySelector('.product-slider-track');
 
