@@ -1,16 +1,8 @@
 import { getProducts } from './api.js';
 
-import {
-  productAvailableStock,
-  recommendProducts
-} from './core.js';
+import { productAvailableStock , recommendProducts } from './core.js';
 
-import {
-  escapeHtml,
-  initCommonUI,
-  productCard,
-  skeletonCards
-} from './ui.js';
+import { escapeHtml,initCommonUI,productCard,skeletonCards } from './ui.js';
 
 import { initProductSlider } from './product-slider.js';
 
@@ -115,7 +107,7 @@ async function initHome() {
    */
   const featuredProducts = active
     .filter((product) => product.featured)
-    .slice(0, 4);
+    .slice(0, 12);
 
   /*
    * Bons plans
@@ -127,7 +119,7 @@ async function initHome() {
         productAvailableStock(product) > 0
       );
     })
-    .slice(0, 4);
+    .slice(0, 12);
 
   /*
    * Nouveautés
@@ -136,7 +128,7 @@ async function initHome() {
     .sort((a, b) =>
       b.createdAt.localeCompare(a.createdAt)
     )
-    .slice(0, 4);
+    .slice(0, 12);
 
   /*
    * Recommandés
@@ -148,7 +140,7 @@ async function initHome() {
   const recommendedProducts = recommendProducts(
     active,
     reference,
-    4
+    12
   );
 
   renderProductSlider(
@@ -173,7 +165,8 @@ async function initHome() {
 }
 
 initHome().catch((error) => {
-  console.error(error);
+  console.error('Erreur home:', error);
+alert(error.stack || error.message || String(error));
 
   document
     .querySelectorAll(`

@@ -280,12 +280,12 @@ header{
   transition: transform 6s ease;
 }
 
-#promoImageCarousel .carousel-item.active .promo-slide-image {
+ .carousel-item.active .promo-slide-image {
   transform: scale(1.04);
 }
 
 /* النقاط */
-#promoImageCarousel .carousel-indicators {
+ .carousel-indicators {
   width: fit-content;
   margin-right: auto;
   margin-bottom: 1rem;
@@ -295,7 +295,7 @@ header{
   background: rgba(0, 0, 0, 0.4);
 }
 
-#promoImageCarousel .carousel-indicators button {
+ .carousel-indicators button {
   width: 28px;
   height: 4px;
   border: 0;
@@ -303,14 +303,14 @@ header{
 }
 
 
-#promoImageCarousel .carousel-control-prev,
-#promoImageCarousel .carousel-control-next {
+ .carousel-control-prev,
+ .carousel-control-next {
   width: 7%;
   min-width: 45px;
 }
 
-#promoImageCarousel .carousel-control-prev-icon,
-#promoImageCarousel .carousel-control-next-icon {
+ .carousel-control-prev-icon,
+ .carousel-control-next-icon {
   width: 45px;
   height: 45px;
   padding: 12px;
@@ -792,7 +792,63 @@ header{
   color: #0272fc;
   font-size: 0.92rem;
 }
+.product-slider {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
 
+.product-slider > .product-slider-track {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  transform: none;
+  transition: none;
+  animation: none;
+  touch-action: pan-y pinch-zoom;
+}
+
+.product-slider > .product-slider-track > .product-slide {
+  box-sizing: border-box;
+  flex: 0 0 50%;
+  width: 200%;
+  min-width: 0;
+  margin: 0;
+  padding: 0 10px;
+}
+
+.product-slider-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0;
+}
+
+.product-slider-controls[hidden] {
+  display: none;
+}
+
+@media (min-width: 768px) {
+   
+  .product-slider > .product-slider-track > .product-slide {
+    flex-basis: 50%;
+    width: 50%;
+    max-width: 50%;
+  }
+}
+
+@media (min-width: 992px) {
+  .product-slider > .product-slider-track > .product-slide {
+    flex-basis: 25%;
+    width: 25%;
+    max-width: 25%;
+  }
+}
 @keyframes cart-widget-enter {
   from {
     opacity: 0;
@@ -972,13 +1028,13 @@ header{
     height: clamp(220px, 62vw, 320px);
   }
 
-  #promoImageCarousel .carousel-control-prev,
-  #promoImageCarousel .carousel-control-next {
+   .carousel-control-prev,
+   .carousel-control-next {
     width: 12%;
   }
 
-  #promoImageCarousel .carousel-control-prev-icon,
-  #promoImageCarousel .carousel-control-next-icon {
+   .carousel-control-prev-icon,
+   .carousel-control-next-icon {
     width: 38px;
     height: 38px;
   }

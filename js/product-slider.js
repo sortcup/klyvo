@@ -1,13 +1,5 @@
-export function getItemsPerView(viewportWidth) {
-  if (viewportWidth >= 992) {
-    return 4;
-  }
-
-  if (viewportWidth >= 768) {
-    return 2;
-  }
-
-  return 1;
+export function getItemsPerView(width) {
+  return width >= 992 ? 4 : width >= 768 ? 2 : 1;
 }
 
 export function moveFirstSlideToEnd(track) {
@@ -22,195 +14,290 @@ export function shouldRunProductAutoplay({
   pageHidden,
   reduceMotion
 }) {
-  return slideCount > itemsPerView && !pageHidden;
+  return slideCount > itemsPerView && !pageHidden && !reduceMotion;
 }
 
-export function initProductSlider(
-  slider,
-  options = {}
-) {
-  if (!slider) {
-    return null;
-  }
+export function initProductSlider(slider, options = {}) {
+  const track = slider?.querySelector('.product-slider-track');
 
-  const track = slider.querySelector(
-    '.product-slider-track'
+  if (!track?.children.length) return null;
+
+  slider._productSlider?.destroy();
+
+  const count = track.children.length;
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const events = new AbortController();
+
+  const listen = (target, type, handler) =>
+    target.addEventListener(type, handler, {
+      signal: events.signal
+    });
+
+  const delay = Math.max(
+    1000,
+    Number(options.interval || slider.dataset.interval) || 3500
   );
 
-  if (!track) {
-    return null;
+  let timer = null;
+  let animation = null;
+  let hovered = false;
+  let touching = false;
+  let touchStart = null;
+  let suppressClick = false;
+  let userPaused = false;
+
+  slider.insertAdjacentHTML('beforeend', `
+    <div class="product-slider-controls">
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        data-product-prev
+        aria-label="Produits précédents"
+      >&#8592;</button>
+
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm hidden"
+        data-product-toggle
+        aria-pressed="false"
+        style="display: none;"
+      >Pause</button>
+
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        data-product-next
+        aria-label="Produits suivants"
+      >&#8594;</button>
+    </div>
+  `);
+
+  const controls = slider.querySelector('.product-slider-controls');
+  const toggle = controls.querySelector('[data-product-toggle]');
+
+  const canMove = () =>
+    count > getItemsPerView(window.innerWidth);
+
+  const reduceMotion = () =>
+    options.reduceMotion ?? motion.matches;
+
+  function stop() {
+    clearInterval(timer);
+    timer = null;
   }
 
-  const originalSlides = Array.from(
-    track.children
-  );
+  function sync() {
+    stop();
 
-  if (!originalSlides.length) {
-    return null;
-  }
+    controls.hidden = !canMove();
 
-  const reducedMotion = window.matchMedia(
-    '(prefers-reduced-motion: reduce)'
-  );
+    Array.from(track.children).forEach((slide, index) => {
+      slide.inert = index >= getItemsPerView(window.innerWidth);
+    });
 
-  const interval =
-    Number(options.interval || slider.dataset.interval) ||
-    3500;
+    const paused = userPaused || reduceMotion();
 
-  let autoplayTimer = null;
-  let resizeTimer = null;
-  let isAnimating = false;
+    toggle.textContent = paused ? 'Lecture' : 'Pause';
+    toggle.setAttribute('aria-pressed', String(paused));
+    toggle.setAttribute(
+      'aria-label',
+      paused
+        ? 'Reprendre les produits'
+        : 'Mettre les produits en pause'
+    );
 
-  function currentItemsPerView() {
-    return getItemsPerView(window.innerWidth);
-  }
-
-  function canAutoplay() {
-    return shouldRunProductAutoplay({
-      slideCount: originalSlides.length,
-      itemsPerView: currentItemsPerView(),
+    const autoplayAllowed = shouldRunProductAutoplay({
+      slideCount: count,
+      itemsPerView: getItemsPerView(window.innerWidth),
       pageHidden: document.hidden,
-      reduceMotion: reducedMotion.matches
+      reduceMotion: reduceMotion()
     });
-  }
 
-  function stopAutoplay() {
-    if (autoplayTimer !== null) {
-      window.clearInterval(autoplayTimer);
-      autoplayTimer = null;
-    }
-  }
-
-  function advance() {
-    if (!canAutoplay() || isAnimating) {
-      return;
-    }
-
-    isAnimating = true;
-
-    const movement =
-      100 / currentItemsPerView();
-
-    track.classList.add('is-animating');
-
-    track.style.transform =
-      `translate3d(-${movement}%, 0, 0)`;
-  }
-
-  function finishAdvance(event) {
     if (
-      event.target !== track ||
-      event.propertyName !== 'transform' ||
-      !isAnimating
+      autoplayAllowed &&
+      !paused &&
+      !hovered &&
+      !touching &&
+      !slider.contains(document.activeElement)
     ) {
+      timer = setInterval(() => move(1), delay);
+    }
+  }
+
+  function finish() {
+    if (animation) {
+      animation.onfinish = null;
+      animation.cancel();
+      animation = null;
+    }
+
+    sync();
+  }
+
+  function move(direction) {
+    if (!canMove() || animation) return;
+
+    stop();
+
+    const step = track.firstElementChild.getBoundingClientRect().width;
+
+    let from = 0;
+    let to = -step;
+
+    if (direction < 0) {
+      track.prepend(track.lastElementChild);
+      from = -step;
+      to = 0;
+    }
+
+    const complete = () => {
+      if (direction > 0) {
+        moveFirstSlideToEnd(track);
+      }
+
+      finish();
+    };
+
+    if (reduceMotion() || !track.animate) {
+      complete();
       return;
     }
 
-    track.classList.remove('is-animating');
+    animation = track.animate(
+      [
+        { transform: `translateX(${from}px)` },
+        { transform: `translateX(${to}px)` }
+      ],
+      {
+        duration: 400,
+        easing: 'ease-in-out'
+      }
+    );
 
-    moveFirstSlideToEnd(track);
-
-    track.style.transform =
-      'translate3d(0, 0, 0)';
-
-    isAnimating = false;
+    animation.onfinish = complete;
   }
 
-  function startAutoplay() {
-    stopAutoplay();
+  listen(
+    controls.querySelector('[data-product-prev]'),
+    'click',
+    () => move(-1)
+  );
 
-    if (!canAutoplay()) {
-      return;
+  listen(
+    controls.querySelector('[data-product-next]'),
+    'click',
+    () => move(1)
+  );
+
+  listen(toggle, 'click', () => {
+    userPaused = !(userPaused || reduceMotion());
+
+    if (reduceMotion()) {
+      options.reduceMotion = false;
     }
 
-    autoplayTimer = window.setInterval(
-      advance,
-      interval
-    );
-  }
+    sync();
+  });
 
-  function resetSlider() {
-    stopAutoplay();
+  listen(slider, 'mouseenter', () => {
+    hovered = true;
+    sync();
+  });
 
-    isAnimating = false;
+  listen(slider, 'mouseleave', () => {
+    hovered = false;
+    sync();
+  });
 
-    track.classList.remove('is-animating');
+  listen(slider, 'focusin', stop);
+  listen(slider, 'focusout', () => queueMicrotask(sync));
 
-    originalSlides.forEach((slide) => {
-      track.append(slide);
-    });
+  // السحب بالإصبع على الهاتف
+  listen(track, 'pointerdown', (event) => {
+    if (event.pointerType !== 'touch') return;
 
-    track.style.transform =
-      'translate3d(0, 0, 0)';
+    touchStart = {
+      x: event.clientX,
+      y: event.clientY
+    };
 
-    startAutoplay();
-  }
+    touching = true;
+    stop();
+  });
 
-  function handleResize() {
-    window.clearTimeout(resizeTimer);
+  listen(window, 'pointerup', (event) => {
+    if (!touchStart) return;
 
-    resizeTimer = window.setTimeout(
-      resetSlider,
-      150
-    );
-  }
+    const dx = event.clientX - touchStart.x;
+    const dy = event.clientY - touchStart.y;
 
-  function handleVisibilityChange() {
-    if (document.hidden) {
-      stopAutoplay();
+    touchStart = null;
+    touching = false;
+
+    if (
+      Math.abs(dx) > 40 &&
+      Math.abs(dx) > Math.abs(dy) &&
+      canMove()
+    ) {
+      suppressClick = true;
+
+      setTimeout(() => {
+        suppressClick = false;
+      }, 400);
+
+      move(dx < 0 ? 1 : -1);
     } else {
-      startAutoplay();
+      sync();
     }
-  }
+  });
 
-  track.addEventListener(
-    'transitionend',
-    finishAdvance
-  );
+  // ما يفتحش رابط المنتج بعد السحب
+  track.addEventListener('click', (event) => {
+    if (suppressClick) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }, {
+    capture: true,
+    signal: events.signal
+  });
 
-  slider.addEventListener(
-    'mouseenter',
-    stopAutoplay
-  );
+  listen(window, 'pointercancel', () => {
+    touchStart = null;
+    touching = false;
+    sync();
+  });
 
-  slider.addEventListener(
-    'mouseleave',
-    startAutoplay
-  );
+  listen(window, 'resize', finish);
+  listen(document, 'visibilitychange', sync);
+  listen(motion, 'change', finish);
 
-  slider.addEventListener(
-    'pointerdown',
-    stopAutoplay,
-    { passive: true }
-  );
+  const api = {
+    next: () => move(1),
+    prev: () => move(-1),
 
-  slider.addEventListener(
-    'pointerup',
-    startAutoplay,
-    { passive: true }
-  );
+    destroy() {
+      stop();
+      events.abort();
 
-  slider.addEventListener(
-    'pointercancel',
-    startAutoplay,
-    { passive: true }
-  );
+      if (animation) {
+        animation.onfinish = null;
+        animation.cancel();
+      }
 
-  window.addEventListener(
-    'resize',
-    handleResize,
-    { passive: true }
-  );
+      controls.remove();
 
-  document.addEventListener(
-    'visibilitychange',
-    handleVisibilityChange
-  );
+      Array.from(track.children).forEach((slide) => {
+        slide.inert = false;
+      });
 
-  reducedMotion.addEventListener(
-    'change',
-    resetSlider
-  );
+      delete slider._productSlider;
+    }
+  };
 
-  startAutoplay();
+  slider._productSlider = api;
+
+  sync();
+
+  return api;
 }
