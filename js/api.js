@@ -78,7 +78,6 @@ export async function getProduct(id) {
   const FindProduct = (await getProducts()).find((product) => product.id === id && product.active !== false);
   return FindProduct || null;
 }
-
 export async function submitOrder(customer, items, requestId) {
   const payload = buildOrderRequest(customer, items, requestId);
   if (!STORE_CONFIG.apiUrl) {
