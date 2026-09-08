@@ -41,7 +41,7 @@ function renderProduct(product) {
       <div class="d-flex flex-wrap align-items-center gap-3 mb-4"><div class="quantity-control"><button type="button" data-quantity-change="-1" aria-label="Diminuer la quantité">−</button><input id="product-quantity" type="number" min="1" max="${initialStock}" value="${initialStock > 0 ? 1 : 0}" aria-label="Quantité"><button type="button" data-quantity-change="1" aria-label="Augmenter la quantité">+</button></div><button class="btn btn-primary btn-lg flex-grow-1" type="button" id="add-to-cart" ${initialStock <= 0 ? 'disabled' : ''}><i class="bi bi-bag-plus me-2"></i>Ajouter au panier</button></div>
       <p class="text-danger small" id="option-error" role="alert"></p>
       <div class="detail-facts mb-4"><div class="detail-fact"><small>Marque</small><strong>${escapeHtml(product.brand)}</strong></div><div class="detail-fact"><small>Référence</small><strong>${escapeHtml(product.sku)}</strong></div><div class="detail-fact"><small>Code-barres</small><strong>${escapeHtml(product.barcode)}</strong></div><div class="detail-fact"><small>État</small><strong>${escapeHtml(product.condition)}</strong></div></div>
-      <div class="border-top "><h2 class="h5">Description</h2>${escapeHtml(product.description)}</div>
+      <div class="border-top "><h2 class="h5">Description</h2>` + product.description + `</div>
     </div></div>`;
 
   let color = '';
@@ -114,6 +114,16 @@ async function initProduct() {
   const product = id ? await getProduct(id) : null;
   if (!product) { root.innerHTML = emptyState('Produit introuvable', 'Ce produit n’existe pas ou n’est plus disponible.'); document.title = 'Produit introuvable — klyvo.tn'; return; }
   document.title = `${product.name} — klyvo.tn`;
+  const productUrl = new URL('https://klyvo.tn/product.html');
+  productUrl.searchParams.set('id', id);
+
+  const canonical = document.createElement('link');
+  canonical.rel = 'canonical';
+  canonical.href = productUrl.href;
+  document.head.appendChild(canonical);
+
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.content = productUrl.href;
   document.querySelector('meta[name="description"]').content = product.shortDescription;
   structuredData(product);
   document.querySelector('#product-breadcrumb').innerHTML = `<li class="breadcrumb-item"><a href="index.html">Accueil</a></li><li class="breadcrumb-item"><a href="products.html?category=${encodeURIComponent(product.category)}">${escapeHtml(product.category)}</a></li><li class="breadcrumb-item active" aria-current="page">${escapeHtml(product.name)}</li>`;

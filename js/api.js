@@ -75,7 +75,8 @@ export async function getProducts({ forceRefresh = false } = {}) {
 }
 
 export async function getProduct(id) {
-  return (await getProducts()).find((product) => product.id === id && product.active !== false) || null;
+  const FindProduct = (await getProducts()).find((product) => product.id === id && product.active !== false);
+  return FindProduct || null;
 }
 
 export async function submitOrder(customer, items, requestId) {

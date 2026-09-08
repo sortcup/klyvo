@@ -1,6 +1,6 @@
 export const STORE_CONFIG = Object.freeze({
   name: 'klyvo.tn',
-  apiUrl: 'https://script.google.com/macros/s/AKfycbx0luCBbJCOO1eIZBNwx3SE3rdJHADqDwQQtzKXBV28ZL-wP2Qcek-kpT1tYO9Lki2h/exec',
+  apiUrl: 'https://script.google.com/macros/s/AKfycbxYd5RlYGv5MJ7l8koM8A9pUWmIoQwAC_ubGa5Dcs6b1tOTyXcmzW9RcahUs70qPbc/exec',
   deliveryFee: 8,
   freeDeliveryThreshold: 250,
   email: 'contact@klyvo.tn',
