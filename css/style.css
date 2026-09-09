@@ -811,7 +811,6 @@ header{
   animation: none;
   touch-action: pan-y pinch-zoom;
 }
-
 .product-slider > .product-slider-track > .product-slide {
   box-sizing: border-box;
   flex: 0 0 50%;
