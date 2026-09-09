@@ -73,7 +73,6 @@ export async function getProducts({ forceRefresh = false } = {}) {
   writeCache(DEMO_PRODUCTS);
   return DEMO_PRODUCTS;
 }
-
 export async function getProduct(id) {
   const FindProduct = (await getProducts()).find((product) => product.id === id && product.active !== false);
   return FindProduct || null;
