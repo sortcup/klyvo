@@ -104,9 +104,9 @@ h1, h2, h3, h4, h5, h6 { color: var(--tz-black); font-weight: 750; letter-spacin
 .form-control:focus, .form-select:focus { border-color: var(--tz-blue); box-shadow: 0 0 0 .2rem rgba(18,99,255,.12); }
 .result-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .8rem; margin-bottom: 1.25rem; }
 
-.gallery-main { overflow: hidden; aspect-ratio: 4/3; border-radius: 20px; background: var(--tz-soft); }
+.gallery-main { overflow: hidden; aspect-ratio: 4/3; border-radius: 20px; background: var(--tz-soft); width: 100%; height: 100%;  }
 .gallery-main img { width: 100%; height: 100%; object-fit: cover; }
-.gallery-thumbs { display: flex; gap: .7rem; margin-top: .8rem; }
+.gallery-thumbs { display: flex; gap: .7rem; margin-top: .8rem;  }
 .gallery-thumb { overflow: hidden; width: 78px; height: 65px; padding: 0; border: 2px solid transparent; border-radius: 11px; background: var(--tz-soft); }
 .gallery-thumb.active { border-color: var(--tz-blue); }.gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .detail-price { color: var(--tz-black); font-size: 2rem; font-weight: 850; }
@@ -814,8 +814,8 @@ header{
 
 .product-slider > .product-slider-track > .product-slide {
   box-sizing: border-box;
-  flex: 0 0 50%;
-  width: 200%;
+  flex: 0 0 100%;
+  width: 100%;
   min-width: 0;
   margin: 0;
   padding: 0 10px;

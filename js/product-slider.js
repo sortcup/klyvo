@@ -33,8 +33,8 @@ export function initProductSlider(slider, options = {}) {
     });
 
   const delay = Math.max(
-    1000,
-    Number(options.interval || slider.dataset.interval) || 3500
+    100,
+    Number(options.interval || slider.dataset.interval) || 2500
   );
 
   let timer = null;

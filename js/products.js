@@ -166,7 +166,7 @@ function render() {
   grid.innerHTML = products.length
     ? displayedProducts
         .map((product) => `
-          <div class="">
+          <div class=" col-6 col-md-4 col-lg-3 mb-4">
             ${productCard(product)}
           </div>
         `)

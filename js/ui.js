@@ -11,8 +11,7 @@ export function productCard(product) {
   const available = stock > 0;
   const displayedPrice = selectedUnitPrice(product);
   return `
-
-    <div class="carousel-item active"><div class="promo-slide-image" alt="Promotions klyvo.tn" fetchpriority="high"><article class="product-card card h-100 border-0" data-product-id="${escapeHtml(product.id)}">
+    <div class="carousel-item  active"><div class="promo-slide-image" alt="Promotions klyvo.tn" fetchpriority="high"><article class="product-card card h-100 border-0" data-product-id="${escapeHtml(product.id)}">
       <a class="product-image-wrap" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="Voir ${escapeHtml(product.name)}">
         <img class="card-img-top product-image" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy" width="auto" height="460px">
         <span class="product-badges">
