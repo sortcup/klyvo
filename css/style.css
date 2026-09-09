@@ -814,8 +814,8 @@ header{
 
 .product-slider > .product-slider-track > .product-slide {
   box-sizing: border-box;
-  flex: 0 0 100%;
-  width: 100%;
+  flex: 0 0 50%;
+  width: 50%;
   min-width: 0;
   margin: 0;
   padding: 0 10px;
@@ -832,7 +832,9 @@ header{
 .product-slider-controls[hidden] {
   display: none;
 }
-
+.space{
+  width: 100%;
+}
 @media (min-width: 768px) {
    
   .product-slider > .product-slider-track > .product-slide {

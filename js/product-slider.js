@@ -54,13 +54,13 @@ export function initProductSlider(slider, options = {}) {
         aria-label="Produits précédents"
       >&#8592;</button>
 
-      <button
+      <div class="space"><button
         type="button"
         class="btn btn-outline-primary btn-sm hidden"
         data-product-toggle
         aria-pressed="false"
         style="display: none;"
-      >Pause</button>
+      >Pause</button></div>
 
       <button
         type="button"
@@ -90,10 +90,7 @@ export function initProductSlider(slider, options = {}) {
 
     controls.hidden = !canMove();
 
-    Array.from(track.children).forEach((slide, index) => {
-      slide.inert = index >= getItemsPerView(window.innerWidth);
-    });
-
+    
     const paused = userPaused || reduceMotion();
 
     toggle.textContent = paused ? 'Lecture' : 'Pause';
