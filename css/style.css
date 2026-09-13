@@ -842,7 +842,6 @@ header{
     max-width: 50%;
   }
 }
-
 @media (min-width: 992px) {
   .product-slider > .product-slider-track > .product-slide {
     flex-basis: 25%;
