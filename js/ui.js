@@ -200,7 +200,7 @@ function renderHeader(products) {
       aria-label="klyvo.tn, accueil"
     >
       <img
-        src="photo/logo.png"
+        src="photo/logo.webp"
         alt="klyvo.tn"
         class="brand-icon"
       >
