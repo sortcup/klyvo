@@ -121,15 +121,14 @@ async function initHome() {
     })
     .slice(0, 12);
 
-  /*
-   * Nouveautés
-   */
-  const newProducts = [...active]
-    .sort((a, b) =>
-      b.createdAt.localeCompare(a.createdAt)
-    )
-    .slice(0, 12);
+ function creationTime(product) {
+  const timestamp = Date.parse(product.createdAt ?? '');
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
 
+const newProducts = [...active]
+  .sort((a, b) => creationTime(b) - creationTime(a))
+  .slice(0, 12);
   /*
    * Recommandés
    */
