@@ -23,7 +23,7 @@ export function buildOrderRequest(customer, items, requestId = createRequestId()
       paymentMethod: trim(customer.paymentMethod),
     },
     items: items.map((item) => ({
-      productId: trim(item.productId),
+      productId: trim(item.productId || item.productid),
       color: trim(item.color),
       size: trim(item.size),
       quantity: Number(item.quantity),
@@ -57,6 +57,15 @@ function writeCache(products) {
   }
 }
 
+export function clearProductsCache() {
+  if (typeof sessionStorage === 'undefined') return;
+  try {
+    sessionStorage.removeItem(CACHE_KEY);
+  } catch {
+    // Ignore
+  }
+}
+
 export async function getProducts({ forceRefresh = false } = {}) {
   if (!forceRefresh) {
     const cached = readCache();
@@ -73,6 +82,7 @@ export async function getProducts({ forceRefresh = false } = {}) {
   writeCache(DEMO_PRODUCTS);
   return DEMO_PRODUCTS;
 }
+
 export async function getProduct(id) {
   const products = await getProducts();
   const foundProduct = products.find(
@@ -80,10 +90,12 @@ export async function getProduct(id) {
   );
   return foundProduct || null;
 }
+
 export async function submitOrder(customer, items, requestId) {
   const payload = buildOrderRequest(customer, items, requestId);
   if (!STORE_CONFIG.apiUrl) {
     await new Promise((resolve) => setTimeout(resolve, 650));
+    clearProductsCache();
     return { success: true, data: { orderId: `DEMO-${Date.now().toString(36).toUpperCase()}`, demo: true } };
   }
   const response = await fetch(STORE_CONFIG.apiUrl, {
@@ -94,5 +106,7 @@ export async function submitOrder(customer, items, requestId) {
   });
   const result = await response.json();
   if (!response.ok || !result.success) throw new Error(result.message || 'La commande n’a pas pu être enregistrée.');
+  
+  clearProductsCache();
   return result;
 }
