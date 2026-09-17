@@ -74,8 +74,11 @@ export async function getProducts({ forceRefresh = false } = {}) {
   return DEMO_PRODUCTS;
 }
 export async function getProduct(id) {
-  const FindProduct = (await getProducts()).find((product) => product.id === id && product.active !== false);
-  return FindProduct || null;
+  const products = await getProducts();
+  const foundProduct = products.find(
+    (product) => (product.productid === id || product.id === id) && product.active !== false
+  );
+  return foundProduct || null;
 }
 export async function submitOrder(customer, items, requestId) {
   const payload = buildOrderRequest(customer, items, requestId);
