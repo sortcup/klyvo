@@ -12,17 +12,17 @@ export function productCard(product) {
   const displayedPrice = selectedUnitPrice(product);
   return `
     <div class="carousel-item  active"><div class="promo-slide-image" alt="Promotions klyvo.tn" fetchpriority="high"><article class="product-card card h-100 border-0" data-product-id="${escapeHtml(product.id)}">
-      <a class="product-image-wrap" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="Voir ${escapeHtml(product.name)}">
-        <img class="card-img-top product-image" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy" width="auto" height="460px">
+      <a class="product-image-wrap" href="product.html?id=${encodeURIComponent(product.productId)}" aria-label="Voir ${escapeHtml(product.name)}">
+        <img class="card-img-top product-image" src="${escapeHtml(product.mainImage)}" alt="${escapeHtml(product.name)}" loading="lazy" width="auto" height="460px">
         <span class="product-badges">
-          ${sale ? '<span class="badge text-bg-danger">' + escapeHtml((1-product.discountPrice/product.price).toFixed(2)*100) + '%</span>' : ''}
+          ${sale ? '<span class="badge text-bg-danger">' + escapeHtml((1-product.discountPrice/product.regularPrice).toFixed(2)*100) + '%</span>' : ''}
         </span>
       </a>
       <div class="card-body d-flex flex-column p-1 p-xl-2">
-        <h3 class="product-title h6"><a href="product.html?id=${encodeURIComponent(product.id)}">${escapeHtml(product.name)}</a></h3>
+        <h3 class="product-title h6"><a href="product.html?id=${encodeURIComponent(product.productId)}">${escapeHtml(product.name)}</a></h3>
         <div class="mt-auto d-flex align-items-end justify-content-between gap-2">
           <div>
-            ${sale ? `<div class="old-price">${formatPrice(product.price)}</div>` : ''}
+            ${sale ? `<div class="old-price">${formatPrice(product.regularPrice)}</div>` : ''}
             <div class="product-price">${Array.isArray(product.variants) && product.variants.length ? '' : ''}${formatPrice(displayedPrice)}</div>
           </div>
         </div>
@@ -91,7 +91,7 @@ export function cartWidgetMarkup(product, options = {}) {
     <div class="cart-widget-product">
       <img
         class="cart-widget-image"
-        src="${escapeHtml(product?.image || '')}"
+        src="${escapeHtml(product?.mainImage || '')}"
         alt="${escapeHtml(product?.name || '')}"
         width="82"
         height="82"
@@ -339,7 +339,7 @@ function renderHeader(products) {
       const query = input.value.trim();
       if (query.length < 2) { toggleSuggestions(false); return; }
       const matches = searchProducts(products.filter((product) => product.active !== false), query).slice(0, 5);
-      suggestions.innerHTML = matches.length ? matches.map((product) => `<a href="product.html?id=${encodeURIComponent(product.id)}"><img src="${escapeHtml(product.image)}" alt="" width="44" height="44"><span><strong>${escapeHtml(product.name)}</strong><small>${escapeHtml(product.category)} · ${formatPrice(selectedUnitPrice(product))}</small></span></a>`).join('') : '<p>Aucun produit trouvé</p>';
+      suggestions.innerHTML = matches.length ? matches.map((product) => `<a href="product.html?id=${encodeURIComponent(product.productId)}"><img src="${escapeHtml(product.mainImage)}" alt="" width="44" height="44"><span><strong>${escapeHtml(product.name)}</strong><small>${escapeHtml(product.mainCategory)} · ${formatPrice(selectedUnitPrice(product))}</small></span></a>`).join('') : '<p>Aucun produit trouvé</p>';
       toggleSuggestions(true);
     }, 180);
   });

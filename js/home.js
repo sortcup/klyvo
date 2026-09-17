@@ -68,14 +68,14 @@ async function initHome() {
   
   const categories = [
     ...new Set(
-      active.map((product) => product.category)
+      active.map((product) => product.mainCategory)
     )
   ];
 
   document.querySelector('#category-grid').innerHTML =
     categories.map((category) => {
       const count = active.filter(
-        (product) => product.category === category
+        (product) => product.mainCategory === category
       ).length;
 
       return `

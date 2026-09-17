@@ -20,7 +20,7 @@ function options(values) {
 
 function populateFilters() {
   const active = allProducts.filter((product) => product.active !== false);
-  form.category.insertAdjacentHTML('beforeend', options(active.map((product) => product.category)));
+  form.category.insertAdjacentHTML('beforeend', options(active.map((product) => product.mainCategory)));
   form.brand.insertAdjacentHTML('beforeend', options(active.map((product) => product.brand)));
   form.color.insertAdjacentHTML('beforeend', options(active.flatMap((product) => product.colors || [])));
   form.size.insertAdjacentHTML('beforeend', options(active.flatMap((product) => product.sizes || [])));
@@ -34,7 +34,7 @@ function populateFilters() {
 
 function updateSubcategories(selected = '') {
   const category = form.category.value;
-  const source = category ? allProducts.filter((product) => product.category === category) : allProducts;
+  const source = category ? allProducts.filter((product) => product.mainCategory === category) : allProducts;
   form.subcategory.innerHTML = `<option value="">Toutes</option>${options(source.map((product) => product.subcategory))}`;
   if ([...form.subcategory.options].some((option) => option.value === selected)) form.subcategory.value = selected;
 }

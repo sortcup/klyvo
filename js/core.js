@@ -17,7 +17,7 @@ export function normalizeText(value = '') {
 
 export function effectivePrice(product) {
   const discount = Number(product?.discountPrice);
-  return discount > 0 ? discount : Number(product?.price || 0);
+  return discount > 0 ? discount : Number(product?.regularPrice || 0);
 }
 
 function activeVariants(product) {
@@ -77,9 +77,9 @@ export function searchProducts(products = [], query = '') {
       product.sku,
       product.barcode,
       product.brand,
-      product.category,
+      product.mainCategory,
       product.subcategory,
-      product.description,
+      product.fullDescription,
       product.shortDescription,
       ...(product.tags || []),
     ].map(normalizeText).join(' ');
@@ -93,7 +93,7 @@ export function filterAndSortProducts(products = [], filters = {}) {
   const hasNumericBound = (value) => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
   result = result.filter((product) => {
     const price = selectedUnitPrice(product);
-    return selected(filters.category, product.category)
+    return selected(filters.mainCategory, product.mainCategory)
       && selected(filters.subcategory, product.subcategory)
       && selected(filters.brand, product.brand)
       && (!filters.color || (product.colors || []).includes(filters.color))
@@ -133,11 +133,11 @@ export function recommendProducts(products = [], selectedProduct, limit = 4) {
   if (!selectedProduct) return [];
   const selectedTags = new Set(selectedProduct.tags || []);
   return products
-    .filter((product) => product.id !== selectedProduct.id && product.active !== false && productAvailableStock(product) > 0)
+    .filter((product) => product.productId !== selectedProduct.productId && product.active !== false && productAvailableStock(product) > 0)
     .map((product) => {
       let score = 0;
       if (product.subcategory === selectedProduct.subcategory) score += 6;
-      if (product.category === selectedProduct.category) score += 4;
+      if (product.mainCategory=== selectedProduct.mainCategory) score += 4;
       if (product.brand === selectedProduct.brand) score += 3;
       score += (product.tags || []).filter((tag) => selectedTags.has(tag)).length * 2;
       const reference = Math.max(selectedUnitPrice(selectedProduct), 1);

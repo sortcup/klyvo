@@ -86,7 +86,7 @@ export async function getProducts({ forceRefresh = false } = {}) {
 export async function getProduct(id) {
   const products = await getProducts();
   const foundProduct = products.find(
-    (product) => (product.productid === id || product.id === id) && product.active !== false
+    (product) => (product.productId === id || product.id === id) && product.active !== false
   );
   return foundProduct || null;
 }

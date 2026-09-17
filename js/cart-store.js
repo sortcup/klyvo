@@ -21,13 +21,13 @@ export function createCartStore(storage = globalThis.localStorage) {
     getItems: clone,
     add(product, options = {}) {
       const line = {
-        key: cartLineKey({ productId: product.id, color: options.color, size: options.size }),
-        productId: product.id,
+        key: cartLineKey({ productId: product.productId, color: options.color, size: options.size }),
+        productId: product.productId,
         name: product.name,
         sku: product.sku,
-        image: product.image,
-        color: options.color || '',
-        size: options.size || '',
+        image: product.mainImage,
+        color: options.colors || '',
+        size: options.sizes || '',
         unitPrice: Number.isFinite(Number(options.unitPrice)) ? Number(options.unitPrice) : effectivePrice(product),
         stock: Number(options.stock ?? product.stock ?? 0),
         quantity: clampQuantity(options.quantity, Number(options.stock ?? product.stock ?? 0)),

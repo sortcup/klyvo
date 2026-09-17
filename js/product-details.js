@@ -19,7 +19,7 @@ function optionButtons(values, type, product) {
 function structuredData(product) {
   const script = document.createElement('script');
   script.type = 'application/ld+json';
-  script.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Product', name: product.name, image: product.images, description: product.description, shortDescription: product.shortDescription, sku: product.sku, brand: { '@type': 'Brand', name: product.brand }, offers: { '@type': 'Offer', priceCurrency: 'TND', price: selectedUnitPrice(product), availability: productAvailableStock(product) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' } });
+  script.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Product', name: product.name, image: product.additionalImages, description: product.fullDescription, shortDescription: product.shortDescription, sku: product.sku, brand: { '@type': 'Brand', name: product.brand }, offers: { '@type': 'Offer', priceCurrency: 'TND', price: selectedUnitPrice(product), availability: productAvailableStock(product) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' } });
   document.head.appendChild(script);
 }
 
@@ -27,14 +27,14 @@ function renderProduct(product) {
   const sale = Number(product.discountPrice) > 0;
   const initialStock = productAvailableStock(product);
   const initialPrice = selectedUnitPrice(product);
-  const images = [...new Set([product.image, ...(product.images || [])].filter(Boolean))];
+  const images = [...new Set([product.mainImage, ...(product.additionalImages || [])].filter(Boolean))];
   root.innerHTML = ` <div class="row g-4 g-lg-5">
     <div class="col-lg-6"><div class="gallery-main"><img id="main-product-image" src="${escapeHtml(images[0])}" alt="${escapeHtml(product.name)}" width="800" height="600"></div><div class="gallery-thumbs" aria-label="Galerie du produit">${images.map((image, index) => `<button class="gallery-thumb ${index === 0 ? 'active' : ''}" type="button" data-gallery-image="${escapeHtml(image)}" aria-label="Afficher l’image ${index + 1}"><img src="${escapeHtml(image)}" alt="" width="78" height="65"></button>`).join('')}</div></div>
     <div class="col-lg-6 " style="margin-top: 20%;">
-      <p class="eyebrow mb-2">${escapeHtml(product.category)} · ${escapeHtml(product.subcategory)}</p>
+      <p class="eyebrow mb-2">${escapeHtml(product.mainCategory)} · ${escapeHtml(product.subcategory)}</p>
       <h1 class="display-6 mb-3">${escapeHtml(product.name)}</h1>
       <p class="lead text-secondary">${escapeHtml(product.shortDescription)}</p>
-      <div class="d-flex align-items-end gap-3 my-4"><span class="detail-price" id="detail-price">${formatPrice(initialPrice)}</span>${sale ? `<span class="old-price fs-6 mb-2">${formatPrice(product.price)}</span><span class="badge text-bg-danger mb-2">${escapeHtml((1-product.discountPrice/product.price).toFixed(2)*100)}%</span>` : ''}</div>
+      <div class="d-flex align-items-end gap-3 my-4"><span class="detail-price" id="detail-price">${formatPrice(initialPrice)}</span>${sale ? `<span class="old-price fs-6 mb-2">${formatPrice(product.regularPrice)}</span><span class="badge text-bg-danger mb-2">${escapeHtml((1-product.discountPrice/product.regularPrice).toFixed(2)*100)}%</span>` : ''}</div>
       <div class="stock-line ${initialStock > 0 ? 'in-stock' : 'out-stock'} mb-4" id="detail-stock"><span></span>${initialStock > 0 ? `${initialStock} unités disponibles` : 'Rupture de stock'}</div>
       ${product.colors?.length ? `<fieldset class="mb-4"><legend class="h6">Couleur <span class="text-danger">*</span></legend><div class="option-grid">${optionButtons(product.colors, 'color', product)}</div></fieldset>` : ''}
       ${product.sizes?.length ? `<fieldset class="mb-4"><legend class="h6">Taille <span class="text-danger">*</span></legend><div class="option-grid">${optionButtons(product.sizes, 'size', product)}</div></fieldset>` : ''}
@@ -42,7 +42,7 @@ function renderProduct(product) {
       <p class="text-danger small" id="option-error" role="alert"></p>
       ${product.brand?.length ?`<div class="detail-facts mb-4"><div class="detail-fact"><small>Marque</small><strong>${escapeHtml(product.brand)}</strong></div>` : ''}
       <div class="detail-fact"><small>Référence</small><strong>${escapeHtml(product.sku)}</strong></div>
-      <div class="border-top "><h2 class="h5">Description</h2>` + product.description + `</div>
+      <div class="border-top "><h2 class="h5">Description</h2>` + product.fullDescription + `</div>
     </div></div>`;
 
   let color = '';
@@ -127,7 +127,7 @@ async function initProduct() {
   if (ogUrl) ogUrl.content = productUrl.href;
   document.querySelector('meta[name="description"]').content = product.shortDescription;
   structuredData(product);
-  document.querySelector('#product-breadcrumb').innerHTML = `<li class="breadcrumb-item"><a href="index.html">Accueil</a></li><li class="breadcrumb-item"><a href="products.html?category=${encodeURIComponent(product.category)}">${escapeHtml(product.category)}</a></li><li class="breadcrumb-item active" aria-current="page">${escapeHtml(product.name)}</li>`;
+  document.querySelector('#product-breadcrumb').innerHTML = `<li class="breadcrumb-item"><a href="index.html">Accueil</a></li><li class="breadcrumb-item"><a href="products.html?category=${encodeURIComponent(product.mainCategory)}">${escapeHtml(product.mainCategory)}</a></li><li class="breadcrumb-item active" aria-current="page">${escapeHtml(product.name)}</li>`;
   renderProduct(product);
   const similar = recommendProducts(products, product, 4);
   if (similar.length) { document.querySelector('#similar-section').hidden = false; document.querySelector('#similar-products').innerHTML = similar.map((item) => `<div class="col">${productCard(item)}</div>`).join(''); }
