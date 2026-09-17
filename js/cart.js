@@ -19,7 +19,7 @@ function summary(items) {
 
 function renderRecommendations(items) {
   const section = document.querySelector('#cart-recommendations');
-  const selected = products.find((product) => product.id === items[0]?.productId);
+  const selected = products.find((product) => product.productId === items[0]?.productId);
   const recommendations = selected ? recommendProducts(products, selected, 4) : [];
   section.hidden = !recommendations.length;
   if (recommendations.length) document.querySelector('#recommended-products').innerHTML = recommendations.map((product) => `<div class="col">${productCard(product)}</div>`).join('');

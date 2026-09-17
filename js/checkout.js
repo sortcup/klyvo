@@ -1,5 +1,5 @@
 import { createRequestId, getProducts, submitOrder } from './api.js';
-import { formatPrice, validateCheckout } from './core.js';
+import { formatPrice, validateCheckout,validatePurchaseSelection} from './core.js';
 import { STORE_CONFIG } from './config.js';
 import { cartStore } from './cart-store.js';
 import { emptyState, escapeHtml, initCommonUI, updateCartBadge } from './ui.js';
@@ -60,6 +60,36 @@ async function handleSubmit(event) {
   alert.classList.add('d-none');
   setSubmitting(true);
   try {
+    const freshProducts = await getProducts({ forceRefresh: true });
+
+    for (const item of items) {
+      const productId = String(
+        item.productId || item.productid || ''
+      ).trim();
+
+      const product = freshProducts.find((entry) =>
+        String(entry.productId ?? entry.id ?? '').trim() === productId
+      );
+
+      const check = validatePurchaseSelection(product, item);
+
+      if (!check.valid) {
+        throw new Error(
+          `${item.name || productId} : ${check.message} ` +
+          'Revenez au panier pour modifier votre sélection.'
+        );
+      }
+
+      if (
+        !Number.isSafeInteger(Number(item.quantity)) ||
+        Number(item.quantity) < 1 ||
+        Number(item.quantity) > check.stock
+      ) {
+        throw new Error(
+          `${item.name || productId} : quantité non disponible.`
+        );
+      }
+    }
     const result = await submitOrder(customer, items, orderRequestId);
     const orderId = result.data.orderId;
     if (result.data.demo) {

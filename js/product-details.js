@@ -1,5 +1,5 @@
 import { getProduct, getProducts } from './api.js';
-import { clampQuantity, formatPrice, productAvailableStock, recommendProducts, resolveVariantSelection, selectedUnitPrice } from './core.js';
+import { clampQuantity, formatPrice, productAvailableStock, recommendProducts, resolveVariantSelection, selectedUnitPrice, validatePurchaseSelection } from './core.js';
 import { cartStore } from './cart-store.js';
 import { emptyState, errorState, escapeHtml, initCommonUI, productCard, showCartWidget, updateCartBadge } from './ui.js';
 const root = document.querySelector('#product-detail');
@@ -81,11 +81,15 @@ function renderProduct(product) {
   });
   quantity.addEventListener('change', () => { quantity.value = String(clampQuantity(quantity.value, Number(quantity.max))); });
   root.querySelector('#add-to-cart').addEventListener('click', () => {
-    const missing = (!color && product.colors?.length) || (!size && product.sizes?.length);
-    if (missing) { root.querySelector('#option-error').textContent = 'Veuillez choisir les options du produit.'; return; }
-    const stock = availableStock(product, color, size);
-    if (stock <= 0) { root.querySelector('#option-error').textContent = 'Cette variante n’est plus disponible.'; return; }
-    const unitPrice = selectedUnitPrice(
+    const check = validatePurchaseSelection(product, { color, size });
+
+    if (!check.valid) {
+      root.querySelector('#option-error').textContent = check.message;
+      return;
+    }
+
+    const stock = check.stock;
+  const unitPrice = selectedUnitPrice(
   product,
   { color, size }
 );

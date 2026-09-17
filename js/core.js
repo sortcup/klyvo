@@ -25,13 +25,104 @@ function activeVariants(product) {
 }
 
 export function productAvailableStock(product, selection = {}) {
-  const variants = activeVariants(product);
-  if (!variants.length) return Math.max(0, Number(product?.stock || 0));
-  return variants
-    .filter((variant) => (!selection.color || variant.color === selection.color) && (!selection.size || variant.size === selection.size))
-    .reduce((sum, variant) => sum + Math.max(0, Number(variant.stock || 0)), 0);
-}
+  const allVariants = Array.isArray(product?.variants)
+    ? product.variants
+    : [];
 
+  // Produit sans variantes.
+  if (!allVariants.length) {
+    return Math.max(0, Number(product?.stock) || 0);
+  }
+
+  // Si toutes les variantes sont inactives, le résultat reste 0.
+  return activeVariants(product)
+    .filter((variant) =>
+      (!selection.color || variant.color === selection.color) &&
+      (!selection.size || variant.size === selection.size)
+    )
+    .reduce(
+      (sum, variant) =>
+        sum + Math.max(0, Number(variant.stock) || 0),
+      0
+    );
+}
+export function validatePurchaseSelection(product, selection = {}) {
+  const text = (value) => String(value ?? '').trim();
+
+  if (!product || product.active === false) {
+    return {
+      valid: false,
+      stock: 0,
+      message: 'Ce produit est indisponible.',
+    };
+  }
+
+  const color = text(selection.color);
+  const size = text(selection.size);
+
+  const variants = Array.isArray(product.variants)
+    ? product.variants
+    : [];
+
+  let stock;
+
+  if (variants.length) {
+    const matches = activeVariants(product).filter((variant) =>
+      text(variant.color) === color &&
+      text(variant.size) === size
+    );
+
+    if (matches.length !== 1) {
+      return {
+        valid: false,
+        stock: 0,
+        message: 'Veuillez sélectionner une combinaison disponible.',
+      };
+    }
+
+    stock = Number(matches[0].stock);
+  } else {
+    const colors = Array.isArray(product.colors)
+      ? product.colors.map(text).filter(Boolean)
+      : [];
+
+    const sizes = Array.isArray(product.sizes)
+      ? product.sizes.map(text).filter(Boolean)
+      : [];
+
+    const validColor = colors.length
+      ? colors.includes(color)
+      : color === '';
+
+    const validSize = sizes.length
+      ? sizes.includes(size)
+      : size === '';
+
+    if (!validColor || !validSize) {
+      return {
+        valid: false,
+        stock: 0,
+        message: 'Veuillez vérifier la couleur et la taille.',
+      };
+    }
+
+    stock = Number(product.stock);
+  }
+
+  if (!Number.isSafeInteger(stock) || stock <= 0) {
+    return {
+      valid: false,
+      stock: 0,
+      message: 'Cette sélection est en rupture de stock.',
+    };
+  }
+
+  return {
+    valid: true,
+    stock,
+    message: '',
+  };
+}
 export function selectedUnitPrice(product, selection = {}) {
   const variants = activeVariants(product).filter((variant) =>
     (!selection.color || variant.color === selection.color)
@@ -55,10 +146,10 @@ export function resolveVariantSelection(product, current = {}, next = {}) {
 
 export function deriveCategories(products = []) {
   const taxonomy = new Map();
-  products.forEach(({ category, subcategory }) => {
-    if (!category) return;
-    if (!taxonomy.has(category)) taxonomy.set(category, new Set());
-    if (subcategory) taxonomy.get(category).add(subcategory);
+  products.forEach(({ mainCategory, subcategory }) => {
+    if (!mainCategory) return;
+    if (!taxonomy.has(mainCategory)) taxonomy.set(mainCategory, new Set());
+    if (subcategory) taxonomy.get(mainCategory).add(subcategory);
   });
   return [...taxonomy.entries()]
     .sort(([a], [b]) => a.localeCompare(b, 'fr'))
@@ -93,7 +184,7 @@ export function filterAndSortProducts(products = [], filters = {}) {
   const hasNumericBound = (value) => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
   result = result.filter((product) => {
     const price = selectedUnitPrice(product);
-    return selected(filters.mainCategory, product.mainCategory)
+    return selected(filters.category, product.mainCategory)
       && selected(filters.subcategory, product.subcategory)
       && selected(filters.brand, product.brand)
       && (!filters.color || (product.colors || []).includes(filters.color))
